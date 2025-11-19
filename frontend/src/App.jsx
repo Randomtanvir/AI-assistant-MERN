@@ -4,7 +4,6 @@ import SettingPage from "./pages/SettingPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import { Toaster } from "react-hot-toast";
-import UserPage from "./pages/UserPage";
 function App() {
   return (
     <div>
