@@ -3,9 +3,9 @@ import React from "react";
 const HomePage = () => {
   return (
     <>
-      <section className="min-h-screen bg-linear-to-br from-blue-100 via-sky-200 to-blue-100 backdrop-blur-sm">
+      <section className="min-h-screen bg-linear-to-br from-blue-200 via-sky-300 to-blue-200 backdrop-blur-lg">
         <div className="container mx-auto">
-          <h2 className="pt-4">this is app</h2>
+          <h2 className="pt-4 font-bold">this is app</h2>
         </div>
       </section>
     </>
