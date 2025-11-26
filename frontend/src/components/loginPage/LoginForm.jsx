@@ -1,6 +1,9 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
+import { loginUser } from "../../services/authService";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +11,8 @@ const LoginForm = () => {
     password: "",
   });
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
 
   const handaleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +34,12 @@ const LoginForm = () => {
     e.preventDefault();
     const isValid = validation();
     if (!isValid) return;
+
+    const response = await loginUser(formData);
+
+    localStorage.setItem("user", JSON.stringify(response.user));
+    setUser(response.user); // AuthProvider state update
+    navigate("/");
 
     setFormData({
       email: "",
