@@ -31,8 +31,8 @@ export const registerUser = async ({ fullName, email, password }) => {
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email }).select("+password");
   if (!user) throw new Error("Invalid credentials");
-  const match = await comparePassword(user.password, password);
 
+  const match = await comparePassword(user.password, password);
   if (!match) throw new Error("Invalid credentials");
 
   const accessToken = generateAccessToken(user);
@@ -41,7 +41,11 @@ export const loginUser = async ({ email, password }) => {
   user.refreshToken = refreshToken;
   await user.save();
 
-  return { user, accessToken, refreshToken };
+  // Remove password before returning
+  const safeUser = user.toObject();
+  delete safeUser.password;
+
+  return { user: safeUser, accessToken, refreshToken };
 };
 
 export const refreshTokenService = async (oldToken) => {
@@ -55,4 +59,20 @@ export const refreshTokenService = async (oldToken) => {
   await user.save();
 
   return { newAccessToken, newRefreshToken };
+};
+
+export const updateUser = async (req) => {
+  const { assistantName, image } = req.body;
+  const file = req.file;
+  // const id = req.user._id;
+
+  console.log({
+    file,
+    assistantName,
+    image,
+  });
+
+  const user = "";
+
+  return { user };
 };

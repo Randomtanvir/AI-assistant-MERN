@@ -2,6 +2,7 @@ import {
   loginUser,
   refreshTokenService,
   registerUser,
+  updateUser,
 } from "../services/auth.service.js";
 
 export const register = async (req, res) => {
@@ -78,4 +79,18 @@ export const refreshToken = async (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie("accessToken");
   res.json({ success: true, message: "Logged out" });
+};
+
+export const update = async (req, res) => {
+  try {
+    const { user } = await updateUser(req);
+
+    res.json({
+      success: true,
+      message: "Update successful",
+      user,
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
 };
