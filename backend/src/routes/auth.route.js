@@ -13,8 +13,5 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/refresh", refreshToken);
 router.get("/logout", logout);
-router.get("/checker", protectedRoute, (req, res) => {
-  res.json({ user: req.user });
-});
 
 export default router;

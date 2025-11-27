@@ -13,11 +13,40 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={user?.email ? <HomePage /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              user?.assistantName ? (
+                <HomePage />
+              ) : (
+                <Navigate to="/setting" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
-        <Route path="/setting" element={<SettingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route
+          path="/setting"
+          element={
+            user ? (
+              user?.assistantName ? (
+                <HomePage />
+              ) : (
+                <SettingPage />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" /> : <LoginPage />}
+        />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/" /> : <SignUpPage />}
+        />
       </Routes>
       <Toaster position="top-center" reverseOrder={false} />
     </div>

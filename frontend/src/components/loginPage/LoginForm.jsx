@@ -39,7 +39,7 @@ const LoginForm = () => {
 
     localStorage.setItem("user", JSON.stringify(response.user));
     setUser(response.user); // AuthProvider state update
-    navigate("/");
+    navigate("/setting");
 
     setFormData({
       email: "",
