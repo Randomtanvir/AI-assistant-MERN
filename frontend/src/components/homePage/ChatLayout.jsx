@@ -93,7 +93,7 @@ export default function ChatLayout() {
         <div className="p-4 border-t flex flex-wrap gap-2">
           <input
             type="text"
-            placeholder="Type a message..."
+            placeholder="Type here..."
             className="flex-1 min-w-[120px] p-3 border border-white/40 rounded-xl focus:outline-none bg-white/20 backdrop-blur-sm text-gray-900 placeholder-gray-500"
           />
           <button className="shrink-0 px-4 py-3 bg-green-500/80 text-white rounded-xl hover:bg-green-600 transition w-full sm:w-auto">
