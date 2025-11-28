@@ -66,6 +66,7 @@ export const updateUser = async (req) => {
   const file = req.file;
   // const id = req.user._id;
 
+  //to do => userupdate
   console.log({
     file,
     assistantName,
