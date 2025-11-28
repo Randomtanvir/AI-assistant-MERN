@@ -5,6 +5,7 @@ import {
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { comparePassword } from "../utils/index.js";
+import { uploadImageInCloudinary } from "../utils/cloudinary.js";
 
 export const registerUser = async ({ fullName, email, password }) => {
   const exists = await User.findOne({ email });
@@ -50,6 +51,7 @@ export const loginUser = async ({ email, password }) => {
 
 export const refreshTokenService = async (oldToken) => {
   const user = await User.findOne({ refreshToken: oldToken });
+
   if (!user) throw new Error("Invalid refresh token");
 
   const newAccessToken = generateAccessToken(user);
@@ -62,18 +64,42 @@ export const refreshTokenService = async (oldToken) => {
 };
 
 export const updateUser = async (req) => {
-  const { assistantName, image } = req.body;
-  const file = req.file;
-  // const id = req.user._id;
+  try {
+    const { assistantName, image } = req.body;
+    const file = req.file;
+    const id = req.user.id;
 
-  //to do => userupdate
-  console.log({
-    file,
-    assistantName,
-    image,
-  });
+    let updateData = {};
 
-  const user = "";
+    // assistant name update
+    if (assistantName) {
+      updateData.assistantName = assistantName;
+    }
 
-  return { user };
+    // if file uploaded -> upload to cloudinary
+    if (file) {
+      const upload = await uploadImageInCloudinary(file);
+      updateData.image = upload.secure_url;
+    }
+
+    // if only string url provided
+    if (image && !file) {
+      updateData.image = image;
+    }
+
+    // Update user directly in MongoDB (more efficient)
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true, // return updated document
+      runValidators: true,
+    }).select("-password -refreshToken"); // hide sensitive fields
+
+    if (!updatedUser) throw new Error("User not found");
+
+    return {
+      user: updatedUser,
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message || "User update failed");
+  }
 };

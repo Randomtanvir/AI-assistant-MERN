@@ -13,6 +13,10 @@ export const loginUser = async (userData) => {
   localStorage.setItem("refreshToken", res.data.refreshToken);
   return res.data;
 };
+export const checkLogin = async () => {
+  const res = await api.get("/auth/check-login");
+  return res.data;
+};
 
 // Logout
 export const logoutUser = async () => {
@@ -21,8 +25,16 @@ export const logoutUser = async () => {
 };
 
 // Get Profile (Protected)
-export const getChecker = async () => {
-  const res = await api.get("/auth/checker");
+export const updateUser = async (formData) => {
+  const token = localStorage.getItem("token"); // অথবা context/state থেকে token
+
+  const res = await api.patch("/auth/update", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`, // ⬅️ MUST
+    },
+  });
+
   return res.data;
 };
 

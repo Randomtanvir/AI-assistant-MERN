@@ -1,3 +1,5 @@
+import User from "../models/user.model.js";
+
 import {
   loginUser,
   refreshTokenService,
@@ -55,24 +57,28 @@ export const refreshToken = async (req, res) => {
   try {
     const oldRefreshToken = req.headers.authorization?.split(" ")[1];
 
+    if (!oldRefreshToken) {
+      return res.status(401).json({ message: "Refresh token missing" });
+    }
+
     const { newAccessToken, newRefreshToken } = await refreshTokenService(
       oldRefreshToken
     );
 
-    // new cookie
+    // set new access token cookie
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: true,
+      secure: false, // localhost হলে false রাখো
       sameSite: "strict",
       maxAge: 15 * 60 * 1000,
     });
 
-    res.json({
+    return res.json({
       success: true,
-      newRefreshToken,
+      refreshToken: newRefreshToken, // send to frontend
     });
   } catch (err) {
-    res.status(401).json({ message: err.message });
+    return res.status(401).json({ message: err.message });
   }
 };
 
@@ -92,5 +98,25 @@ export const update = async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const checkLoginController = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select(
+      "-password -refreshToken"
+    );
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized - user not found" });
+    }
+
+    return res.json({ success: true, user });
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized - token invalid" });
   }
 };

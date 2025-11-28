@@ -5,9 +5,13 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import { Toaster } from "react-hot-toast";
 import useAuth from "./hooks/useAuth";
+import Loading from "./components/Loading";
 function App() {
   const { user, loading } = useAuth();
-  if (loading) return null; // ⛔ redirect বন্ধ, loop বন্ধ
+  if (loading) return <Loading />; // Show loader
+  console.log(user);
+
+  // ⛔ redirect বন্ধ, loop বন্ধ
   return (
     <div>
       <Routes>

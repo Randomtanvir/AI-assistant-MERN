@@ -1,11 +1,17 @@
 import { Check, Upload } from "lucide-react";
 import React, { useState } from "react";
+import { updateUser } from "../../services/authService";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const AIImageGallery = () => {
   const [aiName, setAiname] = useState("");
   const [selectedIamge, setSelectedImage] = useState("");
   const [img, setImg] = useState(null);
-
+  const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
   const images = [
     "https://img.freepik.com/premium-vector/yellow-robot_667648-1123.jpg?semt=ais_hybrid&w=740&q=80",
     "https://img.freepik.com/free-vector/graident-ai-robot-vectorart_78370-4114.jpg?semt=ais_hybrid&w=740&q=80",
@@ -13,9 +19,36 @@ const AIImageGallery = () => {
     "https://i.pinimg.com/736x/9c/21/95/9c2195094a81095f87e83cb5534ee121.jpg",
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(aiName);
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("assistantName", aiName);
+
+    // ✔ Case–1: User selected predefined image (string URL)
+    if (!img && selectedIamge) {
+      formData.append("image", selectedIamge);
+    }
+
+    // ✔ Case–2: User uploaded file
+    if (img) {
+      formData.append("image", img); // MUST be file
+    }
+
+    try {
+      const result = await updateUser(formData);
+      toast.success("User updated!");
+      console.log(result);
+      setUser(result.user);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      toast.error("Update failed");
+    } finally {
+      setLoading(false);
+    }
+
     setAiname("");
   };
 
@@ -47,10 +80,35 @@ const AIImageGallery = () => {
           />
           {aiName.trim().length > 0 && selectedIamge && (
             <button
+              disabled={loading}
               type="submit"
-              className="mr-1 h-10 w-56 rounded-full bg-green-500 text-sm text-white transition active:scale-95"
+              className={`mr-1 h-10 w-56 rounded-full bg-green-500 text-sm text-white flex items-center justify-center gap-2 transition active:scale-95 ${
+                loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Next
+              {loading && (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+              )}
+              {loading ? "Loading..." : "Next"}
             </button>
           )}
         </form>
