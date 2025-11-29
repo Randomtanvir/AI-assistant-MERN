@@ -86,9 +86,6 @@ export default function ChatLayout() {
           <div className="p-3 bg-green-500/70 text-white rounded-xl w-max max-w-[80%] ml-auto shadow">
             Modern glassy chat UI 😎
           </div>
-          <div className="p-3 bg-green-500/70 text-white rounded-xl w-max max-w-[80%] ml-auto shadow">
-            Modern glassy chat UI 😎
-          </div>
         </div>
         <div className="p-4 border-t flex flex-wrap gap-2">
           <input
