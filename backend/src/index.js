@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import authRouts from "./routes/auth.route.js";
+import chatRoute from "./routes/chat.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { connectDB } from "./utils/db.js";
@@ -21,6 +22,7 @@ app.use(
 
 //routes
 app.use("/api/auth", authRouts);
+app.use("/api", chatRoute);
 // app.use("/api/messages", messageRoutes);
 
 app.listen(port, () => {
