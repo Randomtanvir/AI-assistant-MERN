@@ -38,7 +38,7 @@ export const updateUser = async (formData) => {
   return res.data;
 };
 
-// Refresh Access Token
+// Refresh Access Token not
 export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
   const res = await api.get("/auth/refresh", {
