@@ -6,7 +6,6 @@ export const registerUser = async (userData) => {
   localStorage.setItem("refreshToken", res.data.refreshToken);
   return res.data;
 };
-
 // Login
 export const loginUser = async (userData) => {
   const res = await api.post("/auth/login", userData);
@@ -17,13 +16,11 @@ export const checkLogin = async () => {
   const res = await api.get("/auth/check-login");
   return res.data;
 };
-
 // Logout
 export const logoutUser = async () => {
   await api.get("/auth/logout");
   localStorage.removeItem("refreshToken");
 };
-
 // Get Profile (Protected)
 export const updateUser = async (formData) => {
   const token = localStorage.getItem("token"); // অথবা context/state থেকে token
@@ -37,7 +34,6 @@ export const updateUser = async (formData) => {
 
   return res.data;
 };
-
 // Refresh Access Token not
 export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
