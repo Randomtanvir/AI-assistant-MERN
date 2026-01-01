@@ -58,7 +58,7 @@ export default function ChatLayout() {
             Chat 1
           </li>
           <li className="p-2 bg-white/30 rounded-xl text-gray-900 hover:bg-white/50 transition">
-            Chat 2
+            Chat 6
           </li>
         </ul>
       </div>
